@@ -12,7 +12,7 @@ namespace TRMDesktopUI.ViewModels
     {
         private BindingList<string> _products;
 
-        private string _itemQuantity;
+        private int _itemQuantity;
 
         private BindingList<string> _cart;
 
@@ -27,7 +27,7 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        public string ItemQuantity
+        public int ItemQuantity
         {
             get { return _itemQuantity; }
             set 
