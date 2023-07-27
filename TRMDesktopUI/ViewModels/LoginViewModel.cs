@@ -17,13 +17,13 @@ namespace TRMDesktopUI.ViewModels
 
         private string _errorMessage;
 
-        private IAPIHelper _iAPIHelper;
+        private IAPIHelper _apiHelper;
 
         private IEventAggregator _events;
 
-        public LoginViewModel(IAPIHelper iAPIHelper, IEventAggregator events)
+        public LoginViewModel(IAPIHelper apiHelper, IEventAggregator events)
         {
-            _iAPIHelper = iAPIHelper;
+            _apiHelper = apiHelper;
 
             _events = events; 
         }
@@ -100,10 +100,10 @@ namespace TRMDesktopUI.ViewModels
             {
                 ErrorMessage = "";
 
-                var result = await _iAPIHelper.Authenticate(UserName, Password);
+                var result = await _apiHelper.Authenticate(UserName, Password);
 
                 // Capture more information about the user
-                await _iAPIHelper.GetLoggedInUserInfo(result.Access_Token);
+                await _apiHelper.GetLoggedInUserInfo(result.Access_Token);
 
                 _events.PublishOnUIThread(new LogOnEvent());
             }
