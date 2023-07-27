@@ -23,8 +23,20 @@ namespace TRMDesktopUI.ViewModels
         public SalesViewModel(IProductEndpoint productEndpoint)
         {
             _productEndpoint = productEndpoint;
+        }
 
+        protected override async void OnViewLoaded(object view)
+        {
+            base.OnViewLoaded(view);
 
+            await LoadProducts();
+        }
+
+        private async Task LoadProducts()
+        {
+            var productList = await _productEndpoint.GetAll();
+
+            Products = new BindingList<ProductModel>(productList);
         }
 
         public BindingList<ProductModel> Products
