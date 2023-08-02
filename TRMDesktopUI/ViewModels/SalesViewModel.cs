@@ -1,10 +1,8 @@
 ﻿using Caliburn.Micro;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using TRMDataManager.Library.Models;
 using TRMDesktopUI.Library.Api;
 using TRMDesktopUI.Library.Helpers;
 using TRMDesktopUI.Library.Models;
@@ -204,6 +202,8 @@ namespace TRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => Tax);
 
             NotifyOfPropertyChange(() => Total);
+
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
 
         public bool CanRemoveFromCart
@@ -230,6 +230,8 @@ namespace TRMDesktopUI.ViewModels
             NotifyOfPropertyChange(() => Tax);
 
             NotifyOfPropertyChange(() => Total);
+
+            NotifyOfPropertyChange(() => CanCheckOut);
         }
 
         public bool CanCheckOut
@@ -240,9 +242,9 @@ namespace TRMDesktopUI.ViewModels
 
                 // Make sure there is something in the cart
 
-                if (true)
+                if (Cart.Count > 0)
                 {
-
+                    output = true;
                 }
 
                 return output;
@@ -251,7 +253,17 @@ namespace TRMDesktopUI.ViewModels
 
         public void CheckOut()
         {
+            // Create a SaleModel and post to the API
+            SaleModel sale = new SaleModel();
 
+            foreach (var item in Cart)
+            {
+                sale.SaleDetails.Add(new SaleDetailModel
+                {
+                    ProductId = item.Product.Id,
+                    Quantity = item.QuantityInCart
+                });
+            }
         }
     }
 }
