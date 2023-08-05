@@ -8,7 +8,7 @@ using TRMDataManager.Library.Models;
 
 namespace TRMDesktopUI.Library.Api
 {
-    public class SaleEndpoint
+    public class SaleEndpoint : ISaleEndpoint
     {
         private IAPIHelper _apiHelper;
 
@@ -19,7 +19,7 @@ namespace TRMDesktopUI.Library.Api
 
         public async Task PostSale(SaleModel sale)
         {
-            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/Sale", sale)) 
+            using (HttpResponseMessage response = await _apiHelper.ApiClient.PostAsJsonAsync("/api/Sale", sale))
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -31,22 +31,5 @@ namespace TRMDesktopUI.Library.Api
                 }
             }
         }
-
-        //public async Task<List<ProductModel>> GetAll()
-        //{
-        //    using (HttpResponseMessage response = await _apiHelper.ApiClient.GetAsync("/api/Product"))
-        //    {
-        //        if (response.IsSuccessStatusCode)
-        //        {
-        //            var result = await response.Content.ReadAsAsync<List<ProductModel>>();
-
-        //            return result;
-        //        }
-        //        else
-        //        {
-        //            throw new Exception(response.ReasonPhrase);
-        //        }
-        //    }
-        //}
     }
 }

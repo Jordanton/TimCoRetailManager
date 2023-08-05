@@ -13,6 +13,8 @@ namespace TRMDesktopUI.ViewModels
     {
         private IProductEndpoint _productEndpoint;
 
+        private ISaleEndpoint _saleEndpoint;
+
         private IConfigHelper _configHelper;
 
         private BindingList<ProductModel> _products;
@@ -23,9 +25,11 @@ namespace TRMDesktopUI.ViewModels
 
         private BindingList<CartItemModel> _cart = new BindingList<CartItemModel>();
 
-        public SalesViewModel(IProductEndpoint productEndpoint, IConfigHelper configHelper)
+        public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint, IConfigHelper configHelper)
         {
             _productEndpoint = productEndpoint;
+
+            _saleEndpoint = saleEndpoint;
 
             _configHelper = configHelper;
         }
@@ -251,7 +255,7 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        public void CheckOut()
+        public async Task CheckOut()
         {
             // Create a SaleModel and post to the API
             SaleModel sale = new SaleModel();
@@ -264,6 +268,8 @@ namespace TRMDesktopUI.ViewModels
                     Quantity = item.QuantityInCart
                 });
             }
+
+            await _saleEndpoint.PostSale(sale);
         }
     }
 }
