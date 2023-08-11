@@ -44,9 +44,7 @@ namespace TRMDataManager.Library.DataAccess
                     detail.Tax = (detail.PurchasePrice * taxRate);
                 }
 
-                details.Add(detail);
-                
-                
+                details.Add(detail);             
             }
 
             // Create the sale model
