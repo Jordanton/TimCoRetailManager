@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TRMDesktopUI.EventModels;
+using TRMDesktopUI.Library.Api;
 using TRMDesktopUI.Library.Models;
 
 namespace TRMDesktopUI.ViewModels
@@ -17,13 +18,17 @@ namespace TRMDesktopUI.ViewModels
 
         private ILoggedInUserModel _user;
 
-        public ShellViewModel(IEventAggregator events, SalesViewModel salesVM, ILoggedInUserModel user)
+        private IAPIHelper _apiHelper;
+
+        public ShellViewModel(IEventAggregator events, SalesViewModel salesVM, ILoggedInUserModel user, IAPIHelper apiHelper)
         {
             _events = events;
 
             _salesVM = salesVM;
 
             _user = user;
+
+            _apiHelper = apiHelper;
 
             _events.Subscribe(this);
 
@@ -52,7 +57,9 @@ namespace TRMDesktopUI.ViewModels
 
         public void LogOut()
         {
-            _user.LogOffUser();
+            _user.ResetUserModel();
+
+            _apiHelper.LogOffUser();
 
             ActivateItem(IoC.Get<LoginViewModel>());
 

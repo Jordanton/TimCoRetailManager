@@ -16,6 +16,6 @@ namespace TRMDesktopUI.Library.Models
 
         string Token { get; set; }
 
-        void LogOffUser()
+        void ResetUserModel();
     }
 }
