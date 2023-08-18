@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Caliburn.Micro;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using TRMDataManager.Library.Models;
 using TRMDesktopUI.Library.Api;
 using TRMDesktopUI.Library.Helpers;
@@ -22,6 +25,10 @@ namespace TRMDesktopUI.ViewModels
 
         private IMapper _mapper;
 
+        private readonly StatusInfoViewModel _status;
+
+        private readonly IWindowManager _window;
+
         private BindingList<ProductDisplayModel> _products;
 
         private ProductDisplayModel _selectedProduct;
@@ -33,7 +40,7 @@ namespace TRMDesktopUI.ViewModels
         private BindingList<CartItemDisplayModel> _cart = new BindingList<CartItemDisplayModel>();
 
         public SalesViewModel(IProductEndpoint productEndpoint, ISaleEndpoint saleEndpoint, 
-            IConfigHelper configHelper, IMapper mapper)
+            IConfigHelper configHelper, IMapper mapper, StatusInfoViewModel status, IWindowManager window)
         {
             _productEndpoint = productEndpoint;
 
@@ -42,13 +49,43 @@ namespace TRMDesktopUI.ViewModels
             _configHelper = configHelper;
 
             _mapper = mapper;
+
+            _status = status;
+
+            _window = window;
         }
 
         protected override async void OnViewLoaded(object view)
         {
             base.OnViewLoaded(view);
 
-            await LoadProducts();
+            try
+            {
+                await LoadProducts();
+            }
+            catch (Exception ex)
+            {
+                dynamic settings = new ExpandoObject();
+
+                settings.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+                settings.ResizeMode = ResizeMode.NoResize;
+                settings.Title = "System Error";
+
+                if (ex.Message == "Unauthorized")
+                {
+                    _status.UpdateMessage("Unauthorized Access", "You do not have permission to interact with the Sales Form.");
+
+                    _window.ShowDialog(_status, null, settings); 
+                }
+                else
+                {
+                    _status.UpdateMessage("Fatal Exception", ex.Message);
+
+                    _window.ShowDialog(_status, null, settings);
+                }
+
+                TryClose();
+            }
         }
 
         private async Task LoadProducts()
