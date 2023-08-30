@@ -24,13 +24,13 @@ namespace TRMDesktopUI.ViewModels
 
         private UserModel _selectedUser;
 
-        private string _selectedRoleToRemove;
+        private string _selectedUserRole;
 
         private string _selectedRoleToAdd;
 
         private string _selectedUserName;
 
-        private BindingList<string> _selectedUserRoles = new BindingList<string>();
+        private BindingList<string> _userRoles = new BindingList<string>();
 
         private BindingList<string> _availableRoles = new BindingList<string>();
 
@@ -54,7 +54,7 @@ namespace TRMDesktopUI.ViewModels
 
                 SelectedUserName = value.Email;
 
-                SelectedUserRoles = new BindingList<string>(value.Roles.Select(x => x.Value).ToList());
+                UserRoles = new BindingList<string>(value.Roles.Select(x => x.Value).ToList());
 
                 LoadRoles();
 
@@ -62,25 +62,25 @@ namespace TRMDesktopUI.ViewModels
             }
         }       
 
-        public string SelectedRoleToRemove
+        public string SelectedUserRole
         {
-            get { return _selectedRoleToRemove; }
+            get { return _selectedUserRole; }
             set 
             { 
-                _selectedRoleToRemove = value;
+                _selectedUserRole = value;
 
-                NotifyOfPropertyChange(() => SelectedRoleToRemove);
+                NotifyOfPropertyChange(() => SelectedUserRole);
             }
         }       
 
-        public string SelectedRoleToAdd
+        public string SelectedAvailableRole
         {
             get { return _selectedRoleToAdd; }
             set 
             { 
                 _selectedRoleToAdd = value;
 
-                NotifyOfPropertyChange(() => SelectedRoleToAdd);
+                NotifyOfPropertyChange(() => SelectedAvailableRole);
             }
         }
 
@@ -95,14 +95,14 @@ namespace TRMDesktopUI.ViewModels
             }
         }
 
-        public BindingList<string> SelectedUserRoles
+        public BindingList<string> UserRoles
         {
-            get { return _selectedUserRoles; }
+            get { return _userRoles; }
             set 
             { 
-                _selectedUserRoles = value;
+                _userRoles = value;
 
-                NotifyOfPropertyChange(() => SelectedUserRoles);
+                NotifyOfPropertyChange(() => UserRoles);
             }
         }
 
@@ -170,7 +170,7 @@ namespace TRMDesktopUI.ViewModels
 
             foreach (var role in roles)
             {
-                if (SelectedUserRoles.IndexOf(role.Value) < 0)
+                if (UserRoles.IndexOf(role.Value) < 0)
                 {
                     AvailableRoles.Add(role.Value);
                 }
@@ -179,20 +179,20 @@ namespace TRMDesktopUI.ViewModels
 
         public async Task AddSelectedRole()
         {
-            await _userEndpoint.AddUserToRole(SelectedUser.Id, SelectedRoleToAdd);
+            await _userEndpoint.AddUserToRole(SelectedUser.Id, SelectedAvailableRole);
 
-            SelectedUserRoles.Add(SelectedRoleToAdd);
+            UserRoles.Add(SelectedAvailableRole);
 
-            AvailableRoles.Remove(SelectedRoleToAdd);
+            AvailableRoles.Remove(SelectedAvailableRole);
         }
 
         public async Task RemoveSelectedRole()
         {
-            await _userEndpoint.RemoveUserFromRole(SelectedUser.Id, SelectedRoleToRemove);
+            await _userEndpoint.RemoveUserFromRole(SelectedUser.Id, SelectedUserRole);
 
-            AvailableRoles.Add(SelectedRoleToRemove);
+            AvailableRoles.Add(SelectedUserRole);
 
-            SelectedUserRoles.Remove(SelectedRoleToRemove);
+            UserRoles.Remove(SelectedUserRole);
         }
     }
 }
