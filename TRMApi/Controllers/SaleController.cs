@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using TRMDataManager.Library.DataAccess;
 using TRMDataManager.Library.Models;
@@ -20,7 +21,9 @@ namespace TRMApi.Controllers
         {
             SaleData data = new SaleData();
 
-            string userId = RequestContext.Principal.Identity.GetUserId();
+            //string userId = RequestContext.Principal.Identity.GetUserId();
+            // The previous line does not work in .NET Core
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             data.SaveSale(sale, userId);
         }
