@@ -33,26 +33,26 @@ namespace TRMApi.Controllers
         public async Task<IActionResult> Privacy()
         {
             // Just run this part once to add the roles for the first time, then comment it out.
-            string[] roles = { "Admin", "Manager", "Cashier" };
+            //string[] roles = { "Admin", "Manager", "Cashier" };
 
-            foreach (var role in roles)
-            {
-                var roleExist = await _roleManager.RoleExistsAsync(role);
+            //foreach (var role in roles)
+            //{
+            //    var roleExist = await _roleManager.RoleExistsAsync(role);
 
-                if (true)
-                {
-                    await _roleManager.CreateAsync(new IdentityRole(role));
-                }
-            }
+            //    if (roleExist == false)
+            //    {
+            //        await _roleManager.CreateAsync(new IdentityRole(role));
+            //    }
+            //}
 
-            var user = await _userManager.FindByEmailAsync("Jordan.Ton-That@ladwp.com");
+            //var user = await _userManager.FindByEmailAsync("Jordan.Ton-That@ladwp.com");
 
-            if (user != null)
-            {
-                await _userManager.AddToRoleAsync(user, "Admin");
+            //if (user != null)
+            //{
+            //    await _userManager.AddToRoleAsync(user, "Admin");
 
-                await _userManager.AddToRoleAsync(user, "Cashier");
-            }
+            //    await _userManager.AddToRoleAsync(user, "Cashier");
+            //}
 
             return View();
         }
