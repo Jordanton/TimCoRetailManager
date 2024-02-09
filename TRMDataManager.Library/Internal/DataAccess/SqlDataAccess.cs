@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace TRMDataManager.Library.Internal.DataAccess
 {
-    internal class SqlDataAccess : IDisposable
+    public class SqlDataAccess : IDisposable, ISqlDataAccess
     {
         private IDbConnection _connection;
 
@@ -38,7 +38,7 @@ namespace TRMDataManager.Library.Internal.DataAccess
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
                 List<T> rows = connection.Query<T>(storedProcedure, parameters, commandType: CommandType.StoredProcedure).ToList();
-                
+
                 return rows;
             }
         }
@@ -49,7 +49,7 @@ namespace TRMDataManager.Library.Internal.DataAccess
 
             using (IDbConnection connection = new SqlConnection(connectionString))
             {
-                connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);             
+                connection.Execute(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -66,7 +66,7 @@ namespace TRMDataManager.Library.Internal.DataAccess
 
             isClosed = false;
         }
-       
+
         // Load using the transaction
         public List<T> LoadDataInTransaction<T, U>(string storedProcedure, U parameters)
         {
@@ -114,12 +114,12 @@ namespace TRMDataManager.Library.Internal.DataAccess
                 catch
                 {
                     // TODO - Log this issue
-                } 
+                }
             }
 
             _transaction = null;
 
             _connection = null;
-        }       
+        }
     }
 }
